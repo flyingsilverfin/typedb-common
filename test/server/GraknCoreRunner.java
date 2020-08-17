@@ -127,7 +127,7 @@ public class GraknCoreRunner implements GraknRunner {
             System.out.println("Starting Grakn Core database server at " + GRAKN_TARGET_DIRECTORY.toAbsolutePath().toString());
             System.out.println("Database directory will be at " + tmpDir.toAbsolutePath());
 
-            graknProcess = executor.command("./grakn", "server",
+            graknProcess = executor.command("./grakn", "server", "start",
                     "--database-port", Integer.toString(port),
                     "--database-directory", tmpDir.toAbsolutePath().toString()).start();
 
