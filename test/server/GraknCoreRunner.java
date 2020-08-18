@@ -2,6 +2,7 @@ package grakn.common.test.server;
 
 import org.apache.commons.io.FileUtils;
 import org.zeroturnaround.exec.ProcessExecutor;
+import org.zeroturnaround.exec.ProcessResult;
 import org.zeroturnaround.exec.StartedProcess;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeoutException;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -130,6 +132,8 @@ public class GraknCoreRunner implements GraknRunner {
             graknProcess = executor.command("./grakn", "server", "start").start();
 
             Thread.sleep(25000);
+
+            assertTrue("Grakn did not manage to start", isStorageRunning() && isServerRunning());
 //            assertTrue("Grakn Core failed to start", graknProcess.getProcess().isAlive());
 
             System.out.println("Grakn Core database server started");
@@ -160,4 +164,28 @@ public class GraknCoreRunner implements GraknRunner {
         System.out.println("================");
         executor.command("cat", Paths.get(".", "logs", "grakn.log").toString()).execute();
     }
+
+    private boolean isStorageRunning() throws InterruptedException, TimeoutException, IOException {
+        System.out.println("Checking if Grakn Storage is running");
+        ProcessResult output = executor.command("./grakn", "server", "status").execute();
+        assertEquals(0, output.getExitValue());
+        String[] lines = output.outputString().split("\n");
+        boolean isRunning = lines[lines.length - 2].contains(": RUNNING");
+
+        System.out.println("Grakn Storage is running: " + isRunning);
+        return isRunning;
+    }
+
+    private boolean isServerRunning() throws InterruptedException, TimeoutException, IOException {
+        System.out.println("Checking if Grakn Server is running");
+        ProcessResult output = executor.command("./grakn", "server", "status").execute();
+        assertEquals(0, output.getExitValue());
+        String[] lines = output.outputString().split("\n");
+        boolean isRunning = lines[lines.length - 1].contains(": RUNNING");
+
+        System.out.println("Grakn Server is running: " + isRunning);
+        return isRunning;
+    }
+
+
 }
