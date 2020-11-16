@@ -3,9 +3,6 @@ package grakn.common.poc.reasoning;
 import grakn.common.collection.Either;
 import grakn.common.concurrent.actor.Actor;
 import grakn.common.poc.reasoning.execution.ExecutionActor;
-import grakn.common.poc.reasoning.execution.Request;
-import grakn.common.poc.reasoning.execution.Response;
-import grakn.common.poc.reasoning.execution.ResponseProducer;
 import grakn.common.poc.reasoning.mock.MockTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +41,7 @@ public class AbstractConjunction<T extends AbstractConjunction<T>> extends Execu
     @Override
     public Either<Request, Response> receiveAnswer(final Request fromUpstream, final Response.Answer fromDownstream, ResponseProducer responseProducer) {
         Actor<? extends ExecutionActor<?>> sender = fromDownstream.sourceRequest().receiver();
-        List<Long> answer = concat(conjunction, fromDownstream.partialAnswer());
+        List<Long> answer = concat(conjunction, fromDownstream.getThis().partialAnswer());
         if (isLast(sender)) {
             LOG.debug("{}: hasProduced: {}", name, answer);
 

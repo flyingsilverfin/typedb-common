@@ -5,8 +5,8 @@ import grakn.common.concurrent.actor.eventloop.EventLoopGroup;
 import grakn.common.poc.reasoning.Conjunctable;
 import grakn.common.poc.reasoning.Conjunction;
 import grakn.common.poc.reasoning.Registry;
+import grakn.common.poc.reasoning.Request;
 import grakn.common.poc.reasoning.Rule;
-import grakn.common.poc.reasoning.execution.Request;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -15,7 +15,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import static grakn.common.collection.Collections.list;
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 public class ReasoningTest {
